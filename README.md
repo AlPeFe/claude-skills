@@ -7,6 +7,7 @@ Skills para Claude (Claude Code / claude.ai) en español.
 | [ask-when-unclear](ask-when-unclear/SKILL.md) | Antes de implementar, detecta dudas de alcance, enfoque o criterios de aceptación y pregunta solo lo que no se pueda deducir. |
 | [decision-records](decision-records/SKILL.md) | Al cerrar una tarea con una decisión técnica, la registra como ADR en `docs/adr/<tipología>/` con índice global. |
 | [concise-output](concise-output/SKILL.md) | Respuestas al grano: primero el resultado, formato más claro (tabla, gráfico, lista o texto breve) y sin relleno. |
+| [unslop](unslop/SKILL.md) | Quita patrones de escritura de IA y da voz humana a textos en prosa. Adaptada al español de [poteto/noodle](https://github.com/poteto/noodle) (MIT). |
 | [visual-change-variants](visual-change-variants/SKILL.md) | Ante cambios visuales ambiguos, genera un preview aislado del componente con 2–4 variantes para elegir antes de tocar el código. |
 
 ## Instalación
