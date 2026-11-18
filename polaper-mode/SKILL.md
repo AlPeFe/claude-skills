@@ -13,11 +13,14 @@ Objetivo: $ARGUMENTS
 ## Premisa: proceso proporcional
 El proceso escala con la tarea, nunca al revés. Un cambio pequeño no lleva tests nuevos, ni review, ni ADR, ni subagentes. Antes de añadir un paso, preguntarse: "¿esto reduce un riesgo real de esta tarea?". Si no, saltarlo.
 
+Sesgo a lo mínimo: la solución más pequeña que cumple, reutilizar lo que existe, quitar antes que añadir, nada de abstracciones para un solo uso.
+
 ## 1. Entender y dividir
-1. Leer el prompt y el código relevante. Resolver solo lo que se pueda deducir (código, docs, ADRs existentes).
-2. Si el prompt empieza por "nueva tarea" / "new task", olvidar el playbook anterior y volver a clasificar.
-3. Dividir en tareas concretas y verificables (TodoWrite / lista de tareas). Una tarea S sola no necesita lista.
-4. **Dudas** (de `ask-when-unclear`): si una suposición equivocada obliga a rehacer trabajo, agrupar las dudas en una sola ronda de 1 a 4 preguntas de opción múltiple, con la recomendada primero. Si la duda tiene un valor por defecto razonable, usarlo y mencionarlo al final.
+1. En tareas M/L, reformular en una línea el objetivo y el cambio más pequeño que lo cumple, y seguir. Así un malentendido se ve antes de escribir código.
+2. Leer el prompt y el código relevante. Resolver solo lo que se pueda deducir (código, docs, ADRs existentes).
+3. Si el prompt empieza por "nueva tarea" / "new task", olvidar el playbook anterior y volver a clasificar.
+4. Dividir en tareas concretas y verificables con la herramienta de tareas. Una tarea S sola no necesita lista.
+5. **Dudas** (de `ask-when-unclear`): si una suposición equivocada obliga a rehacer trabajo, agrupar las dudas en una sola ronda de 1 a 4 preguntas de opción múltiple, con la recomendada primero. Si la duda tiene un valor por defecto razonable, usarlo y mencionarlo al final. Si la duda se resuelve probando (un script, un prototipo rápido), probar en vez de preguntar.
 
 ## 2. Clasificar cada tarea
 Cada tarea se evalúa por separado: una petición puede mezclar una S y una L.
@@ -37,7 +40,7 @@ Cada tarea se evalúa por separado: una petición puede mezclar una S y una L.
 Pasos orientativos: saltar los que no aporten en esa tarea.
 
 - **Investigación** (pregunta, "no toques código"): leer, buscar, responder con evidencia (rutas, líneas, salidas). Sin cambios.
-- **Bug**: reproducir (o localizar con evidencia si no es reproducible) → causa raíz → fix mínimo → verificar que ya no pasa → test de regresión solo si el bug puede volver.
+- **Bug**: leer el error completo → reproducir (o localizar con evidencia si no es reproducible) → causa raíz, sin parches sobre el síntoma → fix mínimo → verificar que ya no pasa → test de regresión solo si el bug puede volver.
 - **Feature**: ver qué existe y reutilizarlo → implementar lo mínimo que cumple → verificar el flujo real → tests si hay lógica no trivial.
 - **Refactor**: sin cambio de comportamiento. Asegurar una red (tests existentes o comprobación antes/después) → cambios en pasos pequeños → verificar mismo resultado.
 - **Decisión** (elegir librería, patrón, arquitectura): 2 o 3 opciones con trade-offs reales; si un experimento pequeño la resuelve, hacerlo. Recomendar una. Si es de producto o preferencia, preguntar. Registrar ADR.
@@ -50,15 +53,18 @@ Delegar solo si se cumplen todas:
 - no toca los mismos archivos que otra tarea en paralelo (si toca archivos, usar `isolation: worktree`),
 - es lo bastante grande para compensar el coste de arrancar un agente sin contexto.
 
-Al delegar, el prompt del subagente lleva: objetivo, archivos y contexto relevante, qué no tocar, cómo verificar y qué devolver (resumen corto + archivos cambiados). Las tareas pequeñas o secuenciales se hacen aquí directamente. Al volver, revisar lo que devuelve cada subagente antes de darlo por bueno.
+Delegar también exploraciones grandes (buscar en muchos archivos, leer logs largos) para no llenar el contexto principal; que devuelvan solo la conclusión.
+
+Lanzar los subagentes paralelos en la misma respuesta. El subagente no conoce este modo: su prompt lleva objetivo, archivos y contexto relevante, qué no tocar, cómo verificar, qué devolver (resumen corto + archivos cambiados) y estas reglas: no hacer push, deploy ni borrados; no preguntar al usuario, decidir lo reversible y decir qué eligió; no añadir alcance. Las tareas pequeñas o secuenciales se hacen aquí directamente. Al volver, no fiarse de su "hecho": mirar el diff y verificar antes de darlo por bueno.
 
 ## 5. Permisos y autonomía
+- Dar la opinión real: si algo que pide el usuario no compensa o hay una opción mejor, decirlo con el motivo. No dar la razón por defecto.
 - **Sin preguntar**: leer, buscar, editar, crear archivos, ejecutar build/tests/linters, commits locales en una rama de trabajo, todo lo que sea local y reversible.
 - **Preguntar siempre antes de**: push, PR, deploy, publicar, borrar datos o archivos no creados en esta tarea, migraciones destructivas, cambiar configuración global, gastar dinero, enviar algo a servicios externos, decisiones de producto.
 - Si el usuario no está y falta algo irreversible: dejar todo preparado, parar y decir exactamente qué falta.
 
 ## 6. Cerrar cada tarea
-1. Verificar según su tamaño (tabla del paso 2). Si algo falla, arreglarlo antes de seguir; no maquillarlo.
+1. Verificar según su tamaño (tabla del paso 2). Sin evidencia no hay "hecho": el comando o la comprobación se ejecuta ahora y se lee su salida; "debería funcionar" no cuenta. Si algo falla, arreglarlo antes de seguir; no maquillarlo.
 2. Review si toca: M autorrevisa el diff (bugs, código muerto, sobreingeniería, convenciones del repo); L pasa por un review independiente y se aplican los hallazgos confirmados.
 3. **ADR** (de `decision-records`): si hubo una decisión técnica, de diseño o de proceso, crear `docs/adr/<tipología>/NNNN-titulo.md` (contexto, decisión, alternativas descartadas, consecuencias) y añadirla al índice. Si el repo no tiene ADRs, preguntar antes de crear la estructura.
 
@@ -67,7 +73,7 @@ Antes de escribir el resumen final, revisar la lista de tareas:
 - Si queda algo pendiente dentro del objetivo ("falta X", "habría que Y"), **no se resume como pendiente**: se convierte en una tarea nueva y se vuelve al paso 2.
 - Solo se para cuando: todo está hecho y verificado, o lo que queda necesita al usuario (decisión, acceso, acción irreversible). En ese caso, preguntar.
 - Lo que está fuera del objetivo no se hace: se menciona en una línea como sugerencia.
-- Si una tarea falla dos veces con el mismo enfoque, cambiar de enfoque o preguntar; no repetir en bucle.
+- Si dos intentos fallan, buscar la suposición que comparten y comprobarla directamente antes de un tercero. Si sigue fallando, cambiar de enfoque o preguntar; no repetir en bucle.
 
 ## 8. Resumen final
 Estilo `concise-output`: primero el resultado, después el detalle mínimo. Tabla si hay varias tareas:
@@ -76,4 +82,4 @@ Estilo `concise-output`: primero el resultado, después el detalle mínimo. Tabl
 |---|---|---|
 | … | ✅ hecho / ❌ falló / ⏸ necesita al usuario | test, comando o comprobación real |
 
-Después, solo si aplica, en una línea cada uno: lo que salió mal o se descartó, ADRs creados, pregunta pendiente para el usuario. Sin listas de "pendientes" que el propio agente podía hacer, sin relleno y sin repetir.
+Después, solo si aplica, en una línea cada uno: lo que salió mal o se descartó, ADRs creados, pregunta pendiente para el usuario. Cada afirmación con su evidencia (comando, test, salida) o marcada como "no verificado". Sin listas de "pendientes" que el propio agente podía hacer, sin relleno y sin repetir.
