@@ -31,6 +31,7 @@ docs/adr/
 ```
 
 - Si el repo ya tiene una carpeta de ADRs o una taxonomía propia, usar la existente.
+- Si el repo no tiene ADRs, preguntar al usuario antes de crear la estructura `docs/adr/` (y dónde ubicarla). Si no la quiere, no crear nada y resumir la decisión en la respuesta.
 - Crear una carpeta de tipología nueva solo si ninguna encaja.
 
 ## Nombre del archivo
@@ -64,8 +65,9 @@ Lista de rutas principales.
 
 ## Pasos
 1. Al cerrar la tarea, decidir si hubo una decisión registrable.
-2. Elegir la tipología y el siguiente número libre (revisar `docs/adr/README.md`).
-3. Crear el archivo con la plantilla, rellenada con lo que realmente ocurrió (incluidas las alternativas que se descartaron durante la conversación).
-4. Si sustituye a un ADR anterior, actualizar el estado del antiguo a "Sustituida por ADR-NNNN".
-5. Añadir una línea al índice `docs/adr/README.md`: `| NNNN | Título | tipología | estado | fecha |`.
-6. Mencionar al usuario en una línea qué ADR se ha creado y dónde.
+2. Si es el primer ADR del repo, preguntar antes de crear la estructura (ver arriba).
+3. Elegir la tipología y el siguiente número libre (revisar `docs/adr/README.md`).
+4. Crear el archivo con la plantilla, rellenada con lo que realmente ocurrió (incluidas las alternativas que se descartaron durante la conversación).
+5. Si sustituye a un ADR anterior, actualizar el estado del antiguo a "Sustituida por ADR-NNNN".
+6. Añadir una línea al índice `docs/adr/README.md`: `| NNNN | Título | tipología | estado | fecha |`.
+7. Mencionar al usuario en una línea qué ADR se ha creado y dónde.

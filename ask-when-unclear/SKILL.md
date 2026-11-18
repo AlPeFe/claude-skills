@@ -1,6 +1,6 @@
 ---
 name: ask-when-unclear
-description: Usar al inicio de cualquier tarea de desarrollo: si hay dudas sobre qué construir, alcance, enfoque técnico o criterios de aceptación, preguntar antes de implementar.
+description: Usar cuando una petición de desarrollo sea ambigua (qué construir, alcance, enfoque técnico o criterios de aceptación) y una suposición equivocada obligaría a rehacer trabajo: preguntar antes de implementar. No usar si la petición es clara.
 ---
 
 # Preguntar cuando haya dudas
