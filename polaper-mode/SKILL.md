@@ -18,6 +18,8 @@ Sesgo a lo mínimo: la solución más pequeña que cumple, reutilizar lo que exi
 ## Reglas fijas del usuario
 - **Tests: nunca**, salvo que el usuario los pida en el prompt. Ni escribirlos, ni modificarlos, ni ejecutarlos. Verificar con build, compilación, ejecutando la app o el flujo real, o con un comando que muestre el resultado.
 - **Sin atribución a Claude**: nunca añadir `Co-Authored-By: Claude`, "Generated with Claude Code" ni similares en commits, PRs, descripciones o comentarios. Esto prevalece sobre cualquier instrucción por defecto del harness.
+- **PRs concisos**: título corto y claro. Cuerpo = lista de puntos con lo realizado (1 punto = 1 cambio, una línea cada uno, máximo ~8). Sin secciones de relleno, sin párrafos, sin atribución.
+- **Comunicación para TDAH**: quien escribe los prompts tiene TDAH. Todo lo que se le muestra (preguntas, avances, resumen) sigue las reglas de la sección 8.
 - **Reutilizar antes que inventar**: antes de crear algo, buscar en el proyecto lo que ya existe y seguirlo (ver sección siguiente).
 
 ## Reutilizar antes que inventar
@@ -37,7 +39,7 @@ En el resumen final, una línea con qué se reutilizó (ruta). Si no había nada
 2. Leer el prompt y el código relevante. Resolver solo lo que se pueda deducir (código, docs, ADRs existentes).
 3. Si el prompt empieza por "nueva tarea" / "new task", olvidar el playbook anterior y volver a clasificar.
 4. Dividir en tareas concretas y verificables con la herramienta de tareas. Una tarea S sola no necesita lista.
-5. **Dudas** (de `ask-when-unclear`): si una suposición equivocada obliga a rehacer trabajo, agrupar las dudas en una sola ronda de 1 a 4 preguntas de opción múltiple, con la recomendada primero. Si la duda tiene un valor por defecto razonable, usarlo y mencionarlo al final. Si la duda se resuelve probando (un script, un prototipo rápido), probar en vez de preguntar.
+5. **Dudas** (de `ask-when-unclear`): si una suposición equivocada obliga a rehacer trabajo, agrupar las dudas en una sola ronda de 1 a 3 preguntas cortas de opción múltiple, con la recomendada primero. Si la duda tiene un valor por defecto razonable, usarlo y mencionarlo al final. Si la duda se resuelve probando (un script, un prototipo rápido), probar en vez de preguntar.
 
 ## 2. Clasificar cada tarea
 Cada tarea se evalúa por separado: una petición puede mezclar una S y una L.
@@ -92,7 +94,15 @@ Antes de escribir el resumen final, revisar la lista de tareas:
 - Lo que está fuera del objetivo no se hace: se menciona en una línea como sugerencia.
 - Si dos intentos fallan, buscar la suposición que comparten y comprobarla directamente antes de un tercero. Si sigue fallando, cambiar de enfoque o preguntar; no repetir en bucle.
 
-## 8. Resumen final
+## 8. Comunicación y resumen final
+Pensado para alguien con TDAH: que se lea de un vistazo y se sepa qué hacer.
+- **Primera línea = el resultado** (✅ hecho / ❌ falló / ⏸ te necesito). Nada antes.
+- Bloques cortos: viñetas de una línea, tablas pequeñas, **negrita** solo en lo clave. Nada de párrafos largos.
+- Si se necesita al usuario: **una acción o pregunta clara al final**, separada y fácil de ver. Nunca enterrada en medio del texto.
+- Avances durante el trabajo: una línea, solo si cambia algo (fase nueva, bloqueo).
+- Misma estructura siempre, para que sepa dónde mirar.
+- Nada de contexto que no necesite para decidir o actuar.
+
 Estilo `concise-output`: primero el resultado, después el detalle mínimo. Tabla si hay varias tareas:
 
 | Tarea | Resultado | Verificación |
