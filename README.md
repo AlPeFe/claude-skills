@@ -18,7 +18,7 @@ El proceso escala con la tarea: una tarea S va directa; las L pasan por delegaci
 ```mermaid
 flowchart TD
     P["/polaper-mode objetivo"] --> U{"¿Dudas que obliguen<br/>a rehacer trabajo?"}
-    U -->|sí| Q["ask-when-unclear<br/>1 ronda, 1-4 preguntas"]
+    U -->|sí| Q["ask-when-unclear<br/>1 ronda, 1-3 preguntas"]
     U -->|no| T
     Q --> T["Dividir en tareas"]
     T --> C{"Clasificar cada tarea<br/>tamaño S / M / L + tipo"}
@@ -41,8 +41,11 @@ flowchart TD
     REV -->|L| CR["Review independiente"]
     SR & CR --> ADR{"¿Hubo decisión?"}
     ADR -->|sí| DR["decision-records<br/>docs/adr/tipología/"]
-    ADR -->|no| OK
-    DR --> OK{"¿Queda algo<br/>dentro del objetivo?"}
+    ADR -->|no| UNS
+    DR --> UNS{"¿Hay prosa<br/>escrita o cambiada?"}
+    UNS -->|sí| UN2["unslop<br/>docs, ADR, PR, README"]
+    UNS -->|no| OK
+    UN2 --> OK{"¿Queda algo<br/>dentro del objetivo?"}
     OK -->|"sí, lo puedo hacer"| T
     OK -->|"necesita al usuario"| H["Preguntar"]
     OK -->|no| S["Resumen final<br/>concise-output"]
@@ -58,7 +61,8 @@ flowchart LR
     PM -->|cierre de tarea| DR["decision-records"]
     PM -->|resumen final| CO["concise-output"]
     VCV -->|variante elegida| DR
-    UN["unslop"] -.->|"textos en prosa<br/>(docs, README)"| CO
+    PM -->|prosa escrita| UN["unslop"]
+    DR -->|texto del ADR| UN
 ```
 
 ## Instalación

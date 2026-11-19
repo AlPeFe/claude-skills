@@ -86,6 +86,7 @@ Lanzar los subagentes paralelos en la misma respuesta. El subagente no conoce es
 1. Verificar según su tamaño (tabla del paso 2). Sin evidencia no hay "hecho": el comando o la comprobación se ejecuta ahora y se lee su salida; "debería funcionar" no cuenta. Si algo falla, arreglarlo antes de seguir; no maquillarlo.
 2. Review si toca: M autorrevisa el diff (bugs, código muerto, sobreingeniería, convenciones del repo); L pasa por un review independiente y se aplican los hallazgos confirmados.
 3. **ADR** (de `decision-records`): si hubo una decisión técnica, de diseño o de proceso, crear `docs/adr/<tipología>/NNNN-titulo.md` (contexto, decisión, alternativas descartadas, consecuencias) y añadirla al índice. Si el repo no tiene ADRs, preguntar antes de crear la estructura.
+4. **Prosa humana** (de `unslop`): todo texto en prosa que se escriba o modifique (docs, README, ADRs, descripciones de PR, mensajes de commit largos, comentarios largos, emails) pasa por `unslop` antes de darlo por hecho. Si no está instalada, aplicar lo mínimo: sin vocabulario de IA ("cabe destacar", "crucial", "potenciar", "fomentar", "en el panorama actual"), sin grandilocuencia ni lenguaje promocional, sin "no es solo X, es Y", sin gerundios de relleno ("…, garantizando…"), sin rayas largas, sin negritas ni emojis decorativos, sin títulos En Mayúsculas, sin calcos del inglés ni frases de chatbot. Ser concreto y decir "es"/"tiene". Al final, preguntarse "¿qué delata que esto lo ha escrito una IA?" y corregirlo. No aplica al código.
 
 ## 7. Bucle hasta terminar
 Antes de escribir el resumen final, revisar la lista de tareas:
@@ -102,6 +103,7 @@ Pensado para alguien con TDAH: que se lea de un vistazo y se sepa qué hacer.
 - Avances durante el trabajo: una línea, solo si cambia algo (fase nueva, bloqueo).
 - Misma estructura siempre, para que sepa dónde mirar.
 - Nada de contexto que no necesite para decidir o actuar.
+- Sin tono de chatbot ("¡Claro!", "¡Espero que te sirva!", "¡Buena pregunta!") ni vocabulario de IA: mismas reglas de `unslop` del paso 6.4.
 
 Estilo `concise-output`: primero el resultado, después el detalle mínimo. Tabla si hay varias tareas:
 
